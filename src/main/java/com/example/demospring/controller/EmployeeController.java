@@ -17,17 +17,22 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
      /* for allEmployeee */
-    @GetMapping(path = "/employees", produces = MediaType.APPLICATION_JSON_VALUE)
+    /*@GetMapping(path = "/employees", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EmployeeEntity>> getAllEmployees() {
         List<EmployeeEntity> emp = employeeService.getAllEmployees();
         return new ResponseEntity<>(emp, HttpStatus.OK);
+    }*/
+    @GetMapping(path = "/employees",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmployeeEntity> getEmployeeByName(@RequestParam String firstName ,@RequestParam String lastName){
+        EmployeeEntity emp = employeeService.getEmployeeByName(firstName,lastName);
+        return new ResponseEntity<>(emp,HttpStatus.OK);
     }
 
     @GetMapping(path = "/employees/{employeeId}", produces = MediaType.APPLICATION_JSON_VALUE)
 
-    public ResponseEntity<EmployeeEntity> getEmployee(@PathVariable Long employeeId) {
-        EmployeeEntity employeeEntity = employeeService.getEmployee(employeeId);
-        return new ResponseEntity<>(employeeEntity, HttpStatus.OK);
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long employeeId) {
+        Employee emp = employeeService.getEmployee(employeeId);
+        return new ResponseEntity<>(emp, HttpStatus.OK);
     }
 
     @PostMapping(value = "/employees", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,9 +46,11 @@ public class EmployeeController {
         Employee eupdate = employeeService.updateEmployee(employeeId, employee);
         return new ResponseEntity<>(eupdate, HttpStatus.OK);
     }
-    @DeleteMapping(path = "/employees/{employeeId}")
-    public void deleteEmployee(@PathVariable Long employeeId) {
+    @DeleteMapping(path = "/employees/{employeeId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long employeeId) {
         employeeService.deleteEmployee(employeeId);
+        return ResponseEntity.noContent().build();
     }
+
 
 }

@@ -24,16 +24,18 @@ public class EmployeeService {
     }
 
 
-    public EmployeeEntity getEmployee(Long employeeId) {
+    public Employee getEmployee(Long employeeId) {
+        Employee employee = new Employee();
         EmployeeEntity employeeEntity = null;
         for (EmployeeEntity ex : employeeEntities) {
             if (ex.getEmployeeId() == employeeId) {
                 employeeEntity = ex;
+                employee.setFirstName(employeeEntity.getFirstName());
+                employee.setLastName(employeeEntity.getLastName());
                 break;
             }
         }
-        return employeeEntity;
-
+        return employee;
        // return employeeEntities.stream().filter(t -> t.getEmployeeId() == employeeId).findFirst().get();
     }
 
@@ -63,7 +65,22 @@ public class EmployeeService {
     }
     public void deleteEmployee(Long employeeId){
         //employeeEntities.stream().filter(t->t.getEmployeeId()!=employeeId).collect(Collectors.toList());
+        for (EmployeeEntity e:employeeEntities){
+            if (e.getEmployeeId()==employeeId){
+                employeeEntities.remove(employeeId);
+            }
+        }
         log.info("deleted");
+    }
+    public EmployeeEntity getEmployeeByName( String firstName ,String lastName){
+        Employee employee = new Employee();
+        EmployeeEntity employeeEntity=null;
+        for (EmployeeEntity e : employeeEntities){
+            if(e.getEmployeeId().equals(firstName) && e.getLastName().equals(lastName)){
+                employeeEntity = e;
+            }
+        }
+        return employeeEntity;
     }
 }
 
